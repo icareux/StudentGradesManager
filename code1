@@ -1,0 +1,98 @@
+import java.util.Scanner;
+
+class AccountVerifier {
+    private final String correctUsername = "Admin";
+    private final String correctPassword = "Admin";
+
+    public boolean login() {
+        Scanner scanner = new Scanner(System.in);
+        String enteredUsername = "";
+        String enteredPassword = "";
+
+        while (!enteredUsername.equals(correctUsername)) {
+            System.out.print("Enter your Username: ");
+            enteredUsername = scanner.nextLine();
+            if (enteredUsername.equals(correctUsername)) {
+                System.out.println("Correct Username!");
+            } else {
+                System.out.println("Incorrect Username!");
+            }
+        }
+
+        while (!enteredPassword.equals(correctPassword)) {
+            System.out.print("Enter your Password: ");
+            enteredPassword = scanner.nextLine();
+            if (enteredPassword.equals(correctPassword)) {
+                System.out.println("Correct Password!");
+            } else {
+                System.out.println("Incorrect Password!");
+            }
+        }
+        return true; 
+    }
+}
+
+class Student {
+    String name;
+    int subjects = 5;
+    double sub1, sub2, sub3, sub4, sub5;
+
+    void displayAverage() {
+        double average = (sub1 + sub2 + sub3 + sub4 + sub5) / subjects;
+        System.out.println("\n--- Student Information ---");
+        System.out.println("Student : " + name);
+        System.out.println("Grades in Sub1  : " + sub1);
+        System.out.println("Grades in Sub2  : " + sub2);
+        System.out.println("Grades in Sub3  : " + sub3);
+        System.out.println("Grades in Sub4  : " + sub4);
+        System.out.println("Grades in Sub5  : " + sub5);
+        System.out.println("Average Grade  : " + average);
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+
+        AccountVerifier verifier = new AccountVerifier();
+        if (verifier.login()) {
+            System.out.println("\nLogin successful! You can now add students.\n");
+
+            boolean addMore = true;
+            while (addMore) {
+                Student student = new Student();
+
+                System.out.print("Enter Student Name: ");
+                student.name = sc.nextLine();
+
+                System.out.print("Enter Grades in Subject 1 : ");
+                student.sub1 = sc.nextDouble();
+
+                System.out.print("Enter Grades in Subject 2 : ");
+                student.sub2 = sc.nextDouble();
+
+                System.out.print("Enter Grades in Subject 3 : ");
+                student.sub3 = sc.nextDouble();
+
+                System.out.print("Enter Grades in Subject 4 : ");
+                student.sub4 = sc.nextDouble();
+
+                System.out.print("Enter Grades in Subject 5 : ");
+                student.sub5 = sc.nextDouble();
+
+                sc.nextLine(); 
+
+                student.displayAverage();
+
+                System.out.print("\nDo you want to add another student? (yes/no): ");
+                String choice = sc.nextLine().trim().toLowerCase();
+                addMore = choice.equals("yes");
+                System.out.println();
+            }
+
+            System.out.println("Exiting... Thank you!");
+        }
+
+        sc.close();
+    }
+}
