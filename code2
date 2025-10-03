@@ -1,0 +1,162 @@
+import java.util.*;
+
+class AccountVerifier {
+    private Map<String, String> accounts = new HashMap<>();
+
+    public void register() {
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.println("\n=== Registration ===");
+        System.out.print("Enter a username: ");
+        String username = scanner.nextLine().trim();
+
+        if (accounts.containsKey(username)) {
+            System.out.println("Username already exists! Please choose another.");
+            return;
+        }
+
+        System.out.print("Enter a password: ");
+        String password = scanner.nextLine().trim();
+
+        accounts.put(username, password);
+        System.out.println("Registration successful for user: " + username);
+    }
+
+    public boolean login() {
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.println("\n=== Login ===");
+        System.out.print("Enter your Username: ");
+        String enteredUsername = scanner.nextLine();
+
+        System.out.print("Enter your Password: ");
+        String enteredPassword = scanner.nextLine();
+
+        if (accounts.containsKey(enteredUsername) &&
+            accounts.get(enteredUsername).equals(enteredPassword)) {
+            System.out.println("Login successful! Welcome " + enteredUsername);
+            return true;
+        } else {
+            System.out.println("Incorrect Username or Password!");
+            return false;
+        }
+    }
+
+    public boolean hasAccounts() {
+        return !accounts.isEmpty();
+    }
+}
+
+class Student {
+    String name;
+    int subjects = 5;
+    double sub1, sub2, sub3, sub4, sub5;
+
+    void displayAverage() {
+        double average = (sub1 + sub2 + sub3 + sub4 + sub5) / subjects;
+        System.out.println("\n--- Student Information ---");
+        System.out.println("Student: " + name);
+        System.out.println("Grades: " + sub1 + ", " + sub2 + ", " + sub3 + ", " + sub4 + ", " + sub5);
+        System.out.println("Average Grade: " + average);
+    }
+}
+
+public class Main {
+    public static void main(String[] args) throws InterruptedException {
+        Scanner sc = new Scanner(System.in);
+        AccountVerifier verifier = new AccountVerifier();
+
+        boolean running = true;
+        while (running) {
+            Thread.sleep(1000);
+            System.out.println("\nOpening student grading system...");
+            Thread.sleep(2000);
+            System.out.println("\n---- Main Menu ----");
+            System.out.println("1. Register");
+            System.out.println("2. Login");
+            System.out.println("3. Exit");
+            System.out.print("Choose an option: ");
+            String choice = sc.nextLine();
+
+            switch (choice) {
+                case "1":
+                    verifier.register();
+                    break;
+
+                case "2":
+                    if (!verifier.hasAccounts()) {
+                        System.out.println("No accounts registered yet! Please register first.");
+                        break;
+                    }
+
+                    if (verifier.login()) {
+                        boolean loggedIn = true;
+                        while (loggedIn) {
+                            System.out.println("\n--- User Menu ---");
+                            System.out.println("1. Grade Students");
+                            System.out.println("2. Logout");
+                            System.out.println("3. Exit Program");
+                            System.out.print("Choose an option: ");
+                            String choice2 = sc.nextLine();
+
+                            switch (choice2) {
+                                case "1":
+                                    boolean addMore = true;
+                                    while (addMore) {
+                                        Student student = new Student();
+
+                                        System.out.print("\nYou may now grade students...");
+                                        Thread.sleep(1000);
+                                        System.out.print("\nEnter Student Name: ");
+                                        student.name = sc.nextLine();
+
+                                        System.out.print("Enter Grades in Subject 1: ");
+                                        student.sub1 = sc.nextDouble();
+                                        System.out.print("Enter Grades in Subject 2: ");
+                                        student.sub2 = sc.nextDouble();
+                                        System.out.print("Enter Grades in Subject 3: ");
+                                        student.sub3 = sc.nextDouble();
+                                        System.out.print("Enter Grades in Subject 4: ");
+                                        student.sub4 = sc.nextDouble();
+                                        System.out.print("Enter Grades in Subject 5: ");
+                                        student.sub5 = sc.nextDouble();
+
+                                        sc.nextLine(); 
+                                        student.displayAverage();
+
+                                        System.out.print("\nDo you want to add another student? (yes/no): ");
+                                        String again = sc.nextLine().trim().toLowerCase();
+                                        addMore = again.equals("yes");
+                                    }
+                                    break;
+
+                                case "2":
+                                    System.out.println("Logging out...");
+                                    loggedIn = false; // return to main menu
+                                    break;
+
+                                case "3":
+                                    System.out.println("Exiting program... Goodbye!");
+                                    running = false;
+                                    loggedIn = false;
+                                    break;
+
+                                default:
+                                    System.out.println("Invalid option! Please try again.");
+                            }
+                        }
+                    }
+                    break;
+
+                case "3":
+                    running = false;
+                    System.out.println("Exiting... Goodbye!");
+                    break;
+
+                default:
+                    System.out.println("Invalid option! Please try again.");
+            }
+        }
+        sc.close();
+    }
+}
